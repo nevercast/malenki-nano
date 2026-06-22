@@ -846,8 +846,7 @@ static void do_rx()
     // bits 5 and 6 are read error flags.
     uint8_t errflags = (1 << 6) | (1 << 5);
 
-    // Check packet type.
-    uint8_t packet_type = buf[0];
+    // Check packet state for errors.
     uint8_t state = radio_state.state;
     bool ok = false;
     bool do_hop = false;
@@ -867,8 +866,9 @@ static void do_rx()
         
         // If we are in bind mode, bind packets are important, 
         // But so are sticks packets.
+        uint8_t packet_type = buf[0];
         if (state == RADIO_STATE_BIND) {
-            if ((packet_type == PACKET_TYPE_BIND1) || (packet_type == PACKET_TYPE_BIND1) || 
+            if ((packet_type == PACKET_TYPE_BIND1) || (packet_type == PACKET_TYPE_BIND2) || 
                 (packet_type == PACKET_TYPE_STICKS)) {
                 // Bind packet.
                 ok = true;
